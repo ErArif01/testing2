@@ -1,0 +1,32 @@
+name: API Metrics
+
+on:
+  schedule:
+    - cron: '* * * * *'  # Run every minute
+
+jobs:
+  capture_metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Run API Metrics Script
+      run: |
+        # Add commands to capture API metrics and store them
+        # Example: node capture_metrics.js >> api_metrics.log
+        echo "Metrics captured at $(date)" >> api_metrics.log
+
+    - name: Commit and Push Changes
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git add api_metrics.log
+        git commit -m "Update API metrics [skip ci]"
+        git push
